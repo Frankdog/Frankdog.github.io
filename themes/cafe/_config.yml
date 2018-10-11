@@ -42,13 +42,13 @@ content_display_fixed: true
 random_posts: 4
 
 widgets:
-- social
+#- social
 - post_content
 - category
 - tagcloud
 - recent_posts
 - archive
-- friendly_link
+#- friendly_link
 #- wechat
 
 # 提供以下内置组件

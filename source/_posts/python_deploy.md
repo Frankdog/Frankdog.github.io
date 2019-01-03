@@ -2,7 +2,17 @@
 title: python-deploy
 date: 2018-03-22 21:17:25
 tags: python
+categories: python
 ---
+- [python deploy](#python-deploy)
+  - [fabric](#fabric)
+  - [nginx](#nginx)
+  - [guicorn](#guicorn)
+  - [gevent](#gevent)
+  - [flask](#flask)
+
+<!-- more -->
+
 # python deploy
 
 `nginx->guincorn->gevent->flask`

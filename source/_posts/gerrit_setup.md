@@ -1,8 +1,18 @@
 ---
 title: gerrit setup
 date: 2018-08-23 10:09:28
-tags: docker gerrit
+tags: gerrit
+categories: docker
 ---
+- [docker + nginx + gerrit](#docker--nginx--gerrit)
+  - [install gerrit](#install-gerrit)
+  - [run gerrit](#run-gerrit)
+  - [install nginx](#install-nginx)
+  - [run nginx](#run-nginx)
+  - [visit gerrit web](#visit-gerrit-web)
+
+
+<!--more-->
 
 # docker + nginx + gerrit 
 

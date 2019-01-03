@@ -1,8 +1,15 @@
 ---
 title: object detection
 date: 2018-04-25 15:59:28
-tags: DeepLearning
+tags: cnn
+categories: deep learning 
 ---
+- [R-CNN](#r-cnn)
+  - [fine-tune CNN网络](#fine-tune-cnn网络)
+  - [训练 SVM 分类器](#训练-svm-分类器)
+  - [合在一起](#合在一起)
+
+<!-- more -->
 
 # R-CNN
 ## fine-tune CNN网络  

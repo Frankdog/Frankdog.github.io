@@ -2,7 +2,24 @@
 title: javascript笔记
 date: 2017-03-01 22:09:28
 tags: javascript
+categories: web
 ---
+
+- [javascript](#javascript)
+  - [数据类型(typeof)](#数据类型typeof)
+  - [Object](#object)
+  - [循环](#循环)
+  - [iterable](#iterable)
+  - [function](#function)
+  - [变量作用域](#变量作用域)
+    - [BOM](#bom)
+  - [function](#function-1)
+  - [对象](#对象)
+  - [闭包](#闭包)
+  - [异步编程方案](#异步编程方案)
+  - [Promise](#promise)
+
+<!-- more -->
 
 # javascript
 ## 数据类型(typeof)

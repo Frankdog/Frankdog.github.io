@@ -4,6 +4,8 @@ node_js: stable
 # S: Build Lifecycle
 install:
   - npm install
+  - git submodule init
+  - git submodule update
 
 
 #before_script:

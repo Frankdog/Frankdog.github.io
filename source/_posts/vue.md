@@ -1,8 +1,8 @@
 ---
 title: vue
 date: 2019-03-04 22:50:21
-tags:
-categories:
+tags: vue
+categories: web
 ---
 - [Component](#component)
   - [define component `image.vue`](#define-component-imagevue)

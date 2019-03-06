@@ -1,8 +1,8 @@
 ---
 title: git笔记
 date: 2019-03-06 21:50:57
-tags:
-categories:
+tags: git
+categories: tools
 ---
 
 

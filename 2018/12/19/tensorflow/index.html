@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Tensorflow 模型 ckpt 模型保存 ckpt 恢复 pb 模型保存 pb 模型恢复 ckpt模型 转 pb模型   Tensorflow layers Tensorboard 使用 API 写日志 显示日志">
+<meta name="keywords" content="tensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorFlow">
+<meta property="og:url" content="http://yoursite.com/2018/12/19/tensorflow/index.html">
+<meta property="og:site_name" content="Frankdog">
+<meta property="og:description" content="Tensorflow 模型 ckpt 模型保存 ckpt 恢复 pb 模型保存 pb 模型恢复 ckpt模型 转 pb模型   Tensorflow layers Tensorboard 使用 API 写日志 显示日志">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-22T09:20:59.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tensorFlow">
+<meta name="twitter:description" content="Tensorflow 模型 ckpt 模型保存 ckpt 恢复 pb 模型保存 pb 模型恢复 ckpt模型 转 pb模型   Tensorflow layers Tensorboard 使用 API 写日志 显示日志">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/19/tensorflow/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>tensorFlow | Frankdog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frankdog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/19/tensorflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frankdog">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frankdog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">tensorFlow
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-19 10:24:59" itemprop="dateCreated datePublished" datetime="2018-12-19T10:24:59+00:00">2018-12-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-22 09:20:59" itemprop="dateModified" datetime="2019-03-22T09:20:59+00:00">2019-03-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><a href="#tensorflow-模型">Tensorflow 模型</a><ul>
+<li><a href="#ckpt-模型保存">ckpt 模型保存</a></li>
+<li><a href="#ckpt-恢复">ckpt 恢复</a></li>
+<li><a href="#pb-模型保存">pb 模型保存</a></li>
+<li><a href="#pb-模型恢复">pb 模型恢复</a></li>
+<li><a href="#ckpt模型-转-pb模型">ckpt模型 转 pb模型</a></li>
+</ul>
+</li>
+<li><a href="#tensorflow-layers">Tensorflow layers</a></li>
+<li><a href="#tensorboard-使用">Tensorboard 使用</a><ul>
+<li><a href="#api">API</a></li>
+<li><a href="#写日志">写日志</a></li>
+<li><a href="#显示日志">显示日志</a></li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="Tensorflow-模型"><a href="#Tensorflow-模型" class="headerlink" title="Tensorflow 模型"></a>Tensorflow 模型</h1><ul>
+<li>ckpt 模型</li>
+<li>pb 模型</li>
+</ul>
+<h2 id="ckpt-模型保存"><a href="#ckpt-模型保存" class="headerlink" title="ckpt 模型保存"></a>ckpt 模型保存</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">inputs = tf.placeholder（tf.float32,shape=[<span class="literal">None</span>,...],name=<span class="string">'inputs'</span>]</span><br><span class="line">...</span><br><span class="line">prediction = tf.nn.softmax(logits,name=<span class="string">'predictions'</span>)</span><br><span class="line"></span><br><span class="line">saver = tf.train.Saver()</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    saver.save(sess,<span class="string">'./xxx/xxx.ckpt'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="ckpt-恢复"><a href="#ckpt-恢复" class="headerlink" title="ckpt 恢复"></a>ckpt 恢复</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    saver = tf.train.import_meta_graph(<span class="string">'./xxx/xxx.xxx.ckpt.meta'</span>)</span><br><span class="line">    saver.restore(sess,<span class="string">'./xxx/xxx.ckpt'</span>)</span><br><span class="line"></span><br><span class="line">    inputs = tf.get_default_graph.get_tensor_by_name(<span class="string">'inputs:0'</span>)</span><br><span class="line"></span><br><span class="line">    pred = tf.get_default_graph.get_tensor_by_name(<span class="string">'prediction:0'</span>)</span><br><span class="line"></span><br><span class="line">    pred = sess.run(prediction,feed_dict=&#123;inputs:xxx&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="pb-模型保存"><a href="#pb-模型保存" class="headerlink" title="pb 模型保存"></a>pb 模型保存</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.python.framework <span class="keyword">import</span> graph_util</span><br><span class="line"></span><br><span class="line">···</span><br><span class="line">inputs = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, ···], name=<span class="string">'inputs'</span>) </span><br><span class="line">···</span><br><span class="line">prediction = tf.nn.softmax(logits, name=<span class="string">'prediction'</span>) </span><br><span class="line">···</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    ...</span><br><span class="line">    graph_def = tf.get_default_graph().as_graph_def()</span><br><span class="line">    output_graph_def = graph_util.convert_variables_to_constants(sess,graph_def,</span><br><span class="line">    [<span class="string">'prediction'</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.gfile.GFile(<span class="string">'./xxx/xxx.pb'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> fid:</span><br><span class="line">        serialized_graph = output_graph_def.SerializeToString()</span><br><span class="line">        fid.write(serialized_graph)</span><br></pre></td></tr></table></figure>
+<h2 id="pb-模型恢复"><a href="#pb-模型恢复" class="headerlink" title="pb 模型恢复"></a>pb 模型恢复</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_model</span><span class="params">(path_to_model.pb)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path_to_model.pb):</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">"'path_to_model.pb' is not exist."</span>)</span><br><span class="line"></span><br><span class="line">    model_graph = tf.Graph()</span><br><span class="line">    <span class="keyword">with</span> model_graph.as_default():</span><br><span class="line">        od_graph_def = tf.GraphDef()</span><br><span class="line">        <span class="keyword">with</span> tf.gfile.GFile(path_to_model.pb, <span class="string">'rb'</span>) <span class="keyword">as</span> fid:</span><br><span class="line">            serialized_graph = fid.read()</span><br><span class="line">            od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">            tf.import_graph_def(od_graph_def, name=<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">return</span> model_graph</span><br><span class="line"></span><br><span class="line">model_graph = load_model(<span class="string">'./xxx/xxx.pb'</span>)</span><br><span class="line"></span><br><span class="line">inputs = model_graph.get_tensor_by_name(<span class="string">'inputs:0'</span>)</span><br><span class="line">prediction = model_graph.get_tensor_by_name(<span class="string">'prediction:0'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> model_graph.as_default():</span><br><span class="line">    <span class="keyword">with</span> tf.Session(graph=model_graph) <span class="keyword">as</span> sess:</span><br><span class="line">        ···</span><br><span class="line">        pred = sess.run(prediction, feed_dict=&#123;inputs: xxx&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ckpt模型-转-pb模型"><a href="#ckpt模型-转-pb模型" class="headerlink" title="ckpt模型 转 pb模型"></a>ckpt模型 转 pb模型</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.python.framework <span class="keyword">import</span> graph_util</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># Load .ckpt file</span></span><br><span class="line">    saver = tf.train.import_meta_graph(<span class="string">'./xxx/xxx.ckpt.meta'</span>)</span><br><span class="line">    saver.restore(sess, <span class="string">'./xxx/xxx.ckpt'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Save as .pb file</span></span><br><span class="line">    graph_def = tf.get_default_graph().as_graph_def()</span><br><span class="line">    output_graph_def = graph_util.convert_variables_to_constants(</span><br><span class="line">        sess, </span><br><span class="line">        graph_def, </span><br><span class="line">        [<span class="string">'prediction'</span>]  &lt;-- 输出节点名，以实际情况为准</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">with</span> tf.gfile.GFile(<span class="string">'./xxx/xxx.pb'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> fid:</span><br><span class="line">        serialized_graph = output_graph_def.SerializeToString()</span><br><span class="line">        fid.write(serialized_graph)</span><br></pre></td></tr></table></figure>
+<h1 id="Tensorflow-layers"><a href="#Tensorflow-layers" class="headerlink" title="Tensorflow layers"></a>Tensorflow layers</h1><ul>
+<li>tf.layers.Input</li>
+<li>tf.layers.conv2d</li>
+<li>tf.layers.max_pooling2d</li>
+<li>tf.layers.dense</li>
+<li>tf.layers.dropout</li>
+</ul>
+<h1 id="Tensorboard-使用"><a href="#Tensorboard-使用" class="headerlink" title="Tensorboard 使用"></a>Tensorboard 使用</h1><h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tf.summary.scalar</span><br><span class="line">tf.summary.histogram</span><br><span class="line">tf.summary.distribution</span><br><span class="line">tf.summary.text</span><br><span class="line">tf.summary.image</span><br><span class="line">tf.summary.audio</span><br><span class="line">tf.summary.merge_all</span><br><span class="line">tf.summary.FileWriter</span><br></pre></td></tr></table></figure>
+<h2 id="写日志"><a href="#写日志" class="headerlink" title="写日志"></a>写日志</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    ...</span><br><span class="line">    tf.summary.merge_all()</span><br><span class="line">    tf.summary.FileWriter(<span class="string">'logs/'</span>,sess.graph)</span><br></pre></td></tr></table></figure>
+<h2 id="显示日志"><a href="#显示日志" class="headerlink" title="显示日志"></a>显示日志</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir=logs</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorFlow/" rel="tag"># tensorFlow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/19/python/" rel="next" title="python">
+                <i class="fa fa-chevron-left"></i> python
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/22/linux动态库/" rel="prev" title="linux动态库">
+                linux动态库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Frankdog">
+            
+              <p class="site-author-name" itemprop="name">Frankdog</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Tensorflow-模型"><span class="nav-number">1.</span> <span class="nav-text">Tensorflow 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ckpt-模型保存"><span class="nav-number">1.1.</span> <span class="nav-text">ckpt 模型保存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ckpt-恢复"><span class="nav-number">1.2.</span> <span class="nav-text">ckpt 恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pb-模型保存"><span class="nav-number">1.3.</span> <span class="nav-text">pb 模型保存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pb-模型恢复"><span class="nav-number">1.4.</span> <span class="nav-text">pb 模型恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ckpt模型-转-pb模型"><span class="nav-number">1.5.</span> <span class="nav-text">ckpt模型 转 pb模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tensorflow-layers"><span class="nav-number">2.</span> <span class="nav-text">Tensorflow layers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tensorboard-使用"><span class="nav-number">3.</span> <span class="nav-text">Tensorboard 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">3.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写日志"><span class="nav-number">3.2.</span> <span class="nav-text">写日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示日志"><span class="nav-number">3.3.</span> <span class="nav-text">显示日志</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frankdog</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
